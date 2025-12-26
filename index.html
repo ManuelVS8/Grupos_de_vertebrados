@@ -170,7 +170,7 @@
     width: 100%;
     max-width: 600px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    order: 10;
+    order: 10; /* Ensure it stays at bottom of flex container if needed, though standard flow puts it after DOM elements */
   }
 
   .hall-of-fame-title {
@@ -439,10 +439,8 @@ const VERTEBRATE_GROUPS = ["Mamífero", "Ave", "Reptil", "Pez", "Anfibio"];
 const TOTAL_QUESTIONS = 16;
 
 /************** Configuración Hall of Fame **************/
-// NOMBRE DE LA PESTAÑA EN GOOGLE SHEETS (Debe coincidir exactamente)
 const SHEET_NAME = "Vertebrados";
-// URL DEL SCRIPT UNIVERSAL
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuUiY7IuB7LpllGQj0A614LJW3lEvv3aUvr6OtAQhT_AykF9NGhNnNe_HaXWQ-XFM/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbu0fcjUhXKQ0sbUkNOx4YhfUno7mif5clU3lBipogFsCtq7UytDrEW8NbTXBvM0LCPQ/exec";
 
 /************** Audio **************/
 const soundFiles = {
@@ -531,7 +529,7 @@ let currentPairIndex = 0;
 let correctFirstAttempts = 0;
 let currentQuestionScored = false;
 let timerInt = null;
-let elapsed = 0; // elapsed son segundos totales (ej: 45.3)
+let elapsed = 0; // Now elapsed is total seconds (float for tenths)
 
 let currentSelection = null;
 let isProcessing = false;
@@ -539,7 +537,7 @@ let userInteracted = false;
 
 /************** Utilities **************/
 function fmtTime(sFloat){
-    // sFloat es total en segundos (ej 65.4)
+    // sFloat is total seconds (e.g. 65.4)
     const m = Math.floor(sFloat / 60).toString().padStart(2,'0');
     const secs = Math.floor(sFloat % 60).toString().padStart(2,'0');
     const tenths = Math.floor((sFloat % 1) * 10).toString();
@@ -633,62 +631,55 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/************** Hall of Fame Logic - VERSIÓN FINAL CORREGIDA **************/
+/************** Hall of Fame Logic **************/
 async function loadHallOfFame() {
     const tbody = el('hofTableBody');
     const loading = el('hofLoading');
     const errorMsg = el('hofError');
     
-    if(!tbody) return;
-    
     tbody.innerHTML = '';
-    if(loading) loading.style.display = 'block';
-    if(errorMsg) errorMsg.style.display = 'none';
+    loading.style.display = 'block';
+    errorMsg.style.display = 'none';
 
     try {
-        // Leer datos: Solo enviamos 'sheet' (sin action=save)
-        const response = await fetch(`${APP_SCRIPT_URL}?sheet=${SHEET_NAME}&t=${Date.now()}`);
+        // Añadimos timestamp para evitar caché
+        const response = await fetch(`${APP_SCRIPT_URL}?action=read&sheet=${SHEET_NAME}&t=${Date.now()}`);
         if(!response.ok) throw new Error("Error de red");
+        const data = await response.json();
         
-        const result = await response.json();
-        if(loading) loading.style.display = 'none';
+        loading.style.display = 'none';
         
-        const scores = Array.isArray(result) ? result : (result.data || []);
-
-        if (scores.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">¡Sé el primero en aparecer!</td></tr>';
-            return;
+        if (data.status === 'success' && data.data && Array.isArray(data.data)) {
+            const scores = data.data;
+            if(scores.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">Aún no hay puntuaciones.</td></tr>';
+                return;
+            }
+            
+            scores.slice(0, 10).forEach((row, index) => {
+                const tr = document.createElement('tr');
+                // Formatear nombre: Nombre + Inicial Apellido
+                const displayName = `${row.name} ${row.surname ? row.surname.charAt(0).toUpperCase() + '.' : ''}`;
+                // El tiempo viene de la hoja de cálculo como número, asumimos segundos decimales
+                const timeNum = parseFloat(row.time);
+                const timeStr = fmtTime(isNaN(timeNum) ? 0 : timeNum);
+                
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${displayName}</td>
+                    <td>${row.score}</td>
+                    <td>${timeStr}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } else {
+            throw new Error("Formato de datos incorrecto");
         }
-        
-        // Filtrar nulos
-        const validScores = scores.filter(row => row.name && row.name !== 'null' && row.name !== null);
-        
-        tbody.innerHTML = '';
-        validScores.slice(0, 10).forEach((row, index) => {
-            const tr = document.createElement('tr');
-            
-            // Formatear nombre
-            const displayName = `${row.name} ${row.surname ? row.surname.charAt(0).toUpperCase() + '.' : ''}`;
-            
-            // CORRECCIÓN DE TIEMPO: 
-            // El script devuelve segundos (ej 45.3). fmtTime espera segundos.
-            // NO multiplicamos por 1000, usamos el valor directo.
-            const timeVal = parseFloat(row.time);
-            const timeStr = fmtTime(timeVal); 
-            
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${displayName}</td>
-                <td>${row.score}</td>
-                <td>${timeStr}</td>
-            `;
-            tbody.appendChild(tr);
-        });
     } catch (error) {
         console.error("Error cargando HOF:", error);
-        if(loading) loading.style.display = 'none';
-        if(errorMsg) errorMsg.style.display = 'block';
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">Error al conectar con el servidor</td></tr>';
+        loading.style.display = 'none';
+        errorMsg.style.display = 'block';
+        tbody.innerHTML = '';
     }
 }
 
@@ -697,52 +688,46 @@ async function submitScore() {
     const surname = el('playerSurname').value.trim();
     const submitBtn = el('submitScoreBtn');
     const discardBtn = el('discardScoreBtn');
+    const modal = el('submitModal');
 
     if (!name || !surname) {
         alert("Por favor, introduce tu nombre y apellido.");
         return;
     }
 
+    // Deshabilitar botones para evitar doble envío
     submitBtn.disabled = true;
     discardBtn.disabled = true;
     submitBtn.textContent = "Enviando...";
 
-    // Cálculo de puntuación
-    const finalScore = Math.round((correctFirstAttempts / TOTAL_QUESTIONS) * 100);
-    
-    // CORRECCIÓN DE TIEMPO AL ENVIAR:
-    // 'elapsed' ya está en segundos (ej: 45.3). Lo enviamos tal cual.
-    // Usamos toFixed(2) para asegurar formato de punto decimal correcto.
-    const timeToSend = elapsed.toFixed(2);
-    
-    // Construcción de la URL con QueryString
-    const params = new URLSearchParams({
-        sheet: SHEET_NAME,     // "Vertebrados"
+    const payload = {
+        score: Math.round((correctFirstAttempts / TOTAL_QUESTIONS) * 100),
+        time: elapsed, // Enviar tiempo con decimales (ej: 65.4)
         name: name,
-        surname: surname,
-        score: finalScore,
-        time: timeToSend,      // Tiempo en segundos (ej: "45.32")
-        action: 'save'         // CRÍTICO: Indica al script que guarde
-    });
-
-    const targetUrl = `${APP_SCRIPT_URL}?${params.toString()}`;
+        surname: surname
+    };
 
     try {
-        // Envío con mode: 'no-cors' para evitar bloqueos CORS de Google
-        await fetch(targetUrl, {
-            method: 'GET', 
-            mode: 'no-cors' 
+        const response = await fetch(APP_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Necesario para Apps Script sin CORS complejo
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                action: 'write',
+                sheet: SHEET_NAME,
+                data: payload
+            })
         });
-
-        // Cerrar modal inmediatamente (ya no esperamos respuesta del servidor)
-        closeModal();
         
-        // Esperar 3 segundos para dar tiempo a Google Sheets a escribir la fila antes de leer
-        setTimeout(loadHallOfFame, 3000);
+        // Como es no-cors, asumimos éxito si no hay error de red
+        closeModal();
+        // Recargar HOF
+        loadHallOfFame();
         
     } catch (error) {
         console.error("Error enviando puntuación:", error);
         alert("Hubo un error al enviar la puntuación. Inténtalo de nuevo.");
+    } finally {
         submitBtn.disabled = false;
         discardBtn.disabled = false;
         submitBtn.textContent = "Guardar";
@@ -763,7 +748,6 @@ function closeModal() {
     el('submitModal').classList.remove('open');
 }
 
-// Listeners
 el('submitScoreBtn').addEventListener('click', submitScore);
 el('discardScoreBtn').addEventListener('click', () => {
     reproducirSonidoTap();
@@ -847,8 +831,10 @@ function finishGame(){
 
   const finalScore = Math.round((correctFirstAttempts / TOTAL_QUESTIONS) * 100);
 
+  // 1. Mostrar pantalla de resultados ANTES del modal
   showScreen('resultsScreen');
 
+  // 2. Reproducir efectos inmediatamente (según petición de corrección)
   const finalMsgEl = el('finalMsg');
   const trophyBox = el('trophyBox');
   
@@ -874,6 +860,7 @@ function finishGame(){
   }
   finalMsgEl.textContent = msg;
 
+  // 3. Mostrar modal para enviar puntuación (no interfiere con el sonido/visual ya mostrados)
   showSubmitModal(elapsed, finalScore);
 }
 
