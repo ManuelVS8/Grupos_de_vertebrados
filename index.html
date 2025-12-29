@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" translate="no">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Grupos de vertebrados</title>
+<title>Vertebrate Groups</title>
 <style>
   /* ====== Reset & base ====== */
   * { box-sizing: border-box; margin:0; padding:0; }
@@ -73,7 +73,7 @@
   /* Game layout */
   .board{ display:flex; flex-direction:column; gap:.8rem; align-items:center; justify-content:center; flex: 1; width: 100%; }
 
-  /* Image stage - CORRECCIÓN: FONDO BLANCO */
+  /* Image stage - CORRECTION: WHITE BACKGROUND */
   .image-container { 
       width:100%; 
       max-width:320px; 
@@ -283,7 +283,7 @@
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   .loading-text { color: white; font-size: 1.2rem; text-align: center; }
 
-  /* Ayuda texto posicionamiento */
+  /* Help text positioning */
   .game-help-text {
     font-size: 0.95rem;
     color: var(--blue-700);
@@ -296,40 +296,40 @@
 <body>
 
 <div class="game-container">
-  <button class="mute-btn" id="muteBtn" title="Silenciar/Activar sonido">🔊</button>
+  <button class="mute-btn" id="muteBtn" title="Mute/Unmute sound">🔊</button>
 
   <!-- Start Screen -->
   <section class="screen active" id="startScreen" aria-labelledby="title">
     <header>
-      <h1 id="title">Grupos de vertebrados</h1>
-      <div class="subtitle">Clasifica los siguientes vertebrados en su correspondiente grupo</div>
+      <h1 id="title">Vertebrate Groups</h1>
+      <div class="subtitle">Classify the following vertebrates into their corresponding group</div>
     </header>
     <div class="start-content">
       <div class="advice-box" role="note" aria-live="polite">
-        Recuerda: los vertebrados se clasifican según sus características Sus tipos son: 
-        <span class="highlight-keyword">mamíferos</span>, <span class="highlight-keyword">aves</span>; <span class="highlight-keyword">reptiles</span>, <span class="highlight-keyword">peces</span> y <span class="highlight-keyword">anfibios</span>.<br>
-        <strong>¡Ánimo!</strong>
+        Remember: vertebrates are classified according to their characteristics. Their types are: 
+        <span class="highlight-keyword">mammals</span>, <span class="highlight-keyword">birds</span>; <span class="highlight-keyword">reptiles</span>, <span class="highlight-keyword">fish</span> and <span class="highlight-keyword">amphibians</span>.<br>
+        <strong>Good luck!</strong>
       </div>
-      <button class="btn btn-primary" id="playBtn">Comenzar</button>
+      <button class="btn btn-primary" id="playBtn">Start</button>
       
-      <!-- Hall of Fame Debajo del botón Comenzar -->
+      <!-- Hall of Fame Below the Start button -->
       <div class="hall-of-fame" id="hallOfFame">
-        <div class="hall-of-fame-title">🏆 Mejores puntuaciones 🏆</div>
+        <div class="hall-of-fame-title">🏆 High Scores 🏆</div>
         <table class="hall-of-fame-table">
           <thead>
             <tr>
-              <th>Posición</th>
-              <th>Nombre</th>
-              <th>Puntos</th>
-              <th>Tiempo</th>
+              <th>Pos</th>
+              <th>Name</th>
+              <th>Points</th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody id="hofTableBody">
-            <!-- Aquí se cargarán las puntuaciones dinámicamente -->
+            <!-- Scores will be loaded here dynamically -->
           </tbody>
         </table>
-        <div id="hofLoading" class="hall-of-fame-loading">Cargando mejores puntuaciones...</div>
-        <div id="hofError" class="hall-of-fame-error" style="display:none;">Error al cargar el Hall de la Fama.</div>
+        <div id="hofLoading" class="hall-of-fame-loading">Loading high scores...</div>
+        <div id="hofError" class="hall-of-fame-error" style="display:none;">Error loading Hall of Fame.</div>
       </div>
 
       <img class="start-image" src="https://raw.githubusercontent.com/ManuelVS8/Efectos_audio/refs/heads/main/Ni%C3%B1os.png" alt="Children learning">
@@ -339,29 +339,29 @@
   <!-- Game Screen -->
   <section class="screen" id="gameScreen">
     <header>
-      <h1 id="gameTitle">Indica a qué grupo pertenecen estos vertebrados</h1>
+      <h1 id="gameTitle">Identify the group for these vertebrates</h1>
     </header>
     
-    <!-- Texto de ayuda debajo del título -->
+    <!-- Help text below the title -->
     <div class="game-help-text">
-      Usa la <span class="highlight-keyword">lista desplegable</span> para seleccionar el grupo.
+      Use the <span class="highlight-keyword">dropdown list</span> to select the group.
     </div>
 
     <div class="game-info">
-      <div class="level-indicator" id="levelIndicator">Nivel 1/16</div>
-      <div class="progress-bar" aria-label="Progreso"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="level-indicator" id="levelIndicator">Level 1/16</div>
+      <div class="progress-bar" aria-label="Progress"><div class="progress-fill" id="progressFill"></div></div>
       <div class="timer" id="timer">00:00</div>
     </div>
 
     <div class="board">
       <div class="image-container">
-        <img id="animalImg" src="" alt="Imagen de vertebrado">
+        <img id="animalImg" src="" alt="Vertebrate image">
       </div>
 
       <div class="select-container">
-        <label id="selectLabel" for="customSelect" class="select-label">Vertebrado</label>
+        <label id="selectLabel" for="customSelect" class="select-label">Vertebrate</label>
         <div id="customSelect" class="custom-select" role="listbox" tabindex="0" aria-expanded="false" aria-labelledby="selectLabel">
-          <span id="selectSelected" class="select-selected">Seleccionar opción</span>
+          <span id="selectSelected" class="select-selected">Select option</span>
           <span class="select-arrow">▼</span>
         </div>
         <div id="selectOptions" class="select-options" role="presentation">
@@ -369,8 +369,8 @@
       </div>
 
       <div class="game-buttons-area">
-        <button class="btn btn-blue" id="checkBtn">Comprobar</button>
-        <button class="btn btn-primary" id="continueBtn" style="display:none;">Continuar</button>
+        <button class="btn btn-blue" id="checkBtn">Check</button>
+        <button class="btn btn-primary" id="continueBtn" style="display:none;">Continue</button>
       </div>
     </div>
   </section>
@@ -378,18 +378,18 @@
   <!-- Results Screen -->
   <section class="screen" id="resultsScreen">
     <header>
-      <h1 class="final-title">Grupos de vertebrados</h1>
+      <h1 class="final-title">Vertebrate Groups</h1>
     </header>
     <div class="results">
       <div id="trophyBox" style="display:none;">
         <div class="trophy">🏆</div>
       </div>
-      <div class="score-title">Puntuación:</div>
+      <div class="score-title">Score:</div>
       <div class="big-score" id="finalScore">0</div>
       <div id="finalMsg" class="final-msg-style"></div>
-      <div class="final-time">Tiempo empleado: <span id="finalTime">00:00</span></div>
-      <button class="btn btn-primary" id="backToMenuBtn">Volver al menú</button>
-      <span class="credit">Creado por Manuel J. Ventura</span>
+      <div class="final-time">Time taken: <span id="finalTime">00:00</span></div>
+      <button class="btn btn-primary" id="backToMenuBtn">Back to menu</button>
+      <span class="credit">Created by Manuel J. Ventura</span>
       <img class="school-logo" src="https://raw.githubusercontent.com/ManuelVS8/Efectos_audio/refs/heads/main/Siurot.png?raw=true" alt="School logo" />
     </div>
   </section>
@@ -398,47 +398,47 @@
 <!-- Modal Submit Score -->
 <div class="modal-overlay" id="submitModal">
     <div class="modal-content">
-        <div class="modal-title">¡Juego Terminado!</div>
-        <div class="modal-info">Tiempo: <span id="modalTime">00:00</span> | Puntos: <span id="modalScore">0</span></div>
-        <input type="text" id="playerName" class="modal-input" placeholder="Nombre" maxlength="20" autocomplete="off">
-        <input type="text" id="playerSurname" class="modal-input" placeholder="Apellido" maxlength="20" autocomplete="off">
+        <div class="modal-title">Game Finished!</div>
+        <div class="modal-info">Time: <span id="modalTime">00:00</span> | Points: <span id="modalScore">0</span></div>
+        <input type="text" id="playerName" class="modal-input" placeholder="First name" maxlength="20" autocomplete="off">
+        <input type="text" id="playerSurname" class="modal-input" placeholder="Surname" maxlength="20" autocomplete="off">
         <div class="modal-buttons">
-            <button id="discardScoreBtn" class="btn btn-ghost">Cancelar</button>
-            <button id="submitScoreBtn" class="btn btn-primary">Guardar</button>
+            <button id="discardScoreBtn" class="btn btn-ghost">Cancel</button>
+            <button id="submitScoreBtn" class="btn btn-primary">Save</button>
         </div>
     </div>
 </div>
 
 <div class="loading-indicator" id="loadingIndicator" style="display: none;">
   <div class="loading-spinner"></div>
-  <div class="loading-text">Cargando audios...</div>
+  <div class="loading-text">Loading audio...</div>
 </div>
 
 <script>
 /************** Data **************/
 const VERTEBRATES_DATA = [
-  { group: 'Mamífero', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Delfin.png' },
-  { group: 'Mamífero', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Koala.png' },
-  { group: 'Mamífero', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Murcielago.png' },
-  { group: 'Mamífero', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/vaca.png' },
-  { group: 'Ave', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Avestruz.png' },
-  { group: 'Ave', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Kiwi.png' },
-  { group: 'Ave', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Pinguino.png' },
-  { group: 'Reptil', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Camaleon.png' },
-  { group: 'Reptil', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Cocodrilo.png' },
-  { group: 'Reptil', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Serpiente.png' },
-  { group: 'Reptil', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Tortuga.png' },
-  { group: 'Pez', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Caballito.png' },
-  { group: 'Pez', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Sardina.png' },
-  { group: 'Pez', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/tiburon.png' },
-  { group: 'Anfibio', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Salamandra.png' },
-  { group: 'Anfibio', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Rana.png' }
+  { group: 'Mammal', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Delfin.png' },
+  { group: 'Mammal', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Koala.png' },
+  { group: 'Mammal', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Murcielago.png' },
+  { group: 'Mammal', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/vaca.png' },
+  { group: 'Bird', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Avestruz.png' },
+  { group: 'Bird', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Kiwi.png' },
+  { group: 'Bird', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Pinguino.png' },
+  { group: 'Reptile', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Camaleon.png' },
+  { group: 'Reptile', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Cocodrilo.png' },
+  { group: 'Reptile', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Serpiente.png' },
+  { group: 'Reptile', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Tortuga.png' },
+  { group: 'Fish', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Caballito.png' },
+  { group: 'Fish', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Sardina.png' },
+  { group: 'Fish', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/tiburon.png' },
+  { group: 'Amphibian', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Salamandra.png' },
+  { group: 'Amphibian', image: 'https://raw.githubusercontent.com/ManuelVS8/Audios-juegos-SCIENCE/refs/heads/main/Animales_y_Plantas/Rana.png' }
 ];
 
-const VERTEBRATE_GROUPS = ["Mamífero", "Ave", "Reptil", "Pez", "Anfibio"];
+const VERTEBRATE_GROUPS = ["Mammal", "Bird", "Reptile", "Fish", "Amphibian"];
 const TOTAL_QUESTIONS = 16;
 
-/************** Configuración Hall of Fame **************/
+/************** Hall of Fame Configuration **************/
 const SHEET_NAME = "Vertebrados";
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbu0fcjUhXKQ0sbUkNOx4YhfUno7mif5clU3lBipogFsCtq7UytDrEW8NbTXBvM0LCPQ/exec";
 
@@ -459,9 +459,9 @@ function preloadSounds() {
         const a = new Audio(url);
         a.preload = 'auto';
         a.oncanplaythrough = () => { sounds[k] = a; resolve(); };
-        a.onerror = () => { console.error(`Error al cargar ${k} de audio: ${url}`); sounds[k] = null; resolve(); };
+        a.onerror = () => { console.error(`Error loading audio ${k}: ${url}`); sounds[k] = null; resolve(); };
       } catch(e) {
-        console.error(`Error al crear Audio para ${k}:`, e);
+        console.error(`Error creating Audio for ${k}:`, e);
         sounds[k] = null;
         resolve();
       }
@@ -483,7 +483,7 @@ function unlockAudio(){
     o.stop(ctx.currentTime + 0.02);
     audioUnlocked = true;
   } catch(e){
-    console.error("Error al desbloquear audio:", e);
+    console.error("Error unlocking audio:", e);
   }
 }
 
@@ -535,6 +535,9 @@ let currentSelection = null;
 let isProcessing = false;
 let userInteracted = false;
 
+// Flag to prevent Hall of Fame duplication race conditions
+let isHofLoading = false;
+
 /************** Utilities **************/
 function fmtTime(sFloat){
     // sFloat is total seconds (e.g. 65.4)
@@ -558,7 +561,7 @@ function stopTimer(){ clearInterval(timerInt); }
 function updateProgress(){
   const pct = (currentPairIndex / TOTAL_QUESTIONS) * 100;
   progressFill.style.width = pct + '%';
-  levelIndicatorEl.textContent = `Nivel ${currentPairIndex + 1}/${TOTAL_QUESTIONS}`;
+  levelIndicatorEl.textContent = `Level ${currentPairIndex + 1}/${TOTAL_QUESTIONS}`;
 }
 
 function shuffle(a){ const arr=[...a]; for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
@@ -633,6 +636,10 @@ document.addEventListener('click', (e) => {
 
 /************** Hall of Fame Logic **************/
 async function loadHallOfFame() {
+    // If a load is already in progress, skip this one to avoid duplication
+    if (isHofLoading) return;
+    isHofLoading = true;
+
     const tbody = el('hofTableBody');
     const loading = el('hofLoading');
     const errorMsg = el('hofError');
@@ -642,9 +649,9 @@ async function loadHallOfFame() {
     errorMsg.style.display = 'none';
 
     try {
-        // Añadimos timestamp para evitar caché
+        // Add timestamp to avoid cache
         const response = await fetch(`${APP_SCRIPT_URL}?action=read&sheet=${SHEET_NAME}&t=${Date.now()}`);
-        if(!response.ok) throw new Error("Error de red");
+        if(!response.ok) throw new Error("Network error");
         const data = await response.json();
         
         loading.style.display = 'none';
@@ -652,15 +659,15 @@ async function loadHallOfFame() {
         if (data.status === 'success' && data.data && Array.isArray(data.data)) {
             const scores = data.data;
             if(scores.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4">Aún no hay puntuaciones.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4">No scores yet.</td></tr>';
                 return;
             }
             
             scores.slice(0, 10).forEach((row, index) => {
                 const tr = document.createElement('tr');
-                // Formatear nombre: Nombre + Inicial Apellido
+                // Format name: Name + Surname Initial
                 const displayName = `${row.name} ${row.surname ? row.surname.charAt(0).toUpperCase() + '.' : ''}`;
-                // El tiempo viene de la hoja de cálculo como número, asumimos segundos decimales
+                // Time comes from sheet as number, assume decimal seconds
                 const timeNum = parseFloat(row.time);
                 const timeStr = fmtTime(isNaN(timeNum) ? 0 : timeNum);
                 
@@ -673,13 +680,16 @@ async function loadHallOfFame() {
                 tbody.appendChild(tr);
             });
         } else {
-            throw new Error("Formato de datos incorrecto");
+            throw new Error("Incorrect data format");
         }
     } catch (error) {
-        console.error("Error cargando HOF:", error);
+        console.error("Error loading HOF:", error);
         loading.style.display = 'none';
         errorMsg.style.display = 'block';
         tbody.innerHTML = '';
+    } finally {
+        // Always reset the flag when finished (success or error)
+        isHofLoading = false;
     }
 }
 
@@ -691,18 +701,18 @@ async function submitScore() {
     const modal = el('submitModal');
 
     if (!name || !surname) {
-        alert("Por favor, introduce tu nombre y apellido.");
+        alert("Please enter your first name and surname.");
         return;
     }
 
-    // Deshabilitar botones para evitar doble envío
+    // Disable buttons to prevent double submission
     submitBtn.disabled = true;
     discardBtn.disabled = true;
-    submitBtn.textContent = "Enviando...";
+    submitBtn.textContent = "Sending...";
 
     const payload = {
         score: Math.round((correctFirstAttempts / TOTAL_QUESTIONS) * 100),
-        time: elapsed, // Enviar tiempo con decimales (ej: 65.4)
+        time: elapsed, // Send time with decimals (e.g: 65.4)
         name: name,
         surname: surname
     };
@@ -710,7 +720,7 @@ async function submitScore() {
     try {
         const response = await fetch(APP_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Necesario para Apps Script sin CORS complejo
+            mode: 'no-cors', // Necessary for Apps Script without complex CORS
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
                 action: 'write',
@@ -719,18 +729,18 @@ async function submitScore() {
             })
         });
         
-        // Como es no-cors, asumimos éxito si no hay error de red
+        // As it is no-cors, we assume success if no network error
         closeModal();
-        // Recargar HOF
+        // Reload HOF
         loadHallOfFame();
         
     } catch (error) {
-        console.error("Error enviando puntuación:", error);
-        alert("Hubo un error al enviar la puntuación. Inténtalo de nuevo.");
+        console.error("Error sending score:", error);
+        alert("There was an error sending the score. Please try again.");
     } finally {
         submitBtn.disabled = false;
         discardBtn.disabled = false;
-        submitBtn.textContent = "Guardar";
+        submitBtn.textContent = "Save";
     }
 }
 
@@ -770,10 +780,10 @@ function showCurrentQuestion() {
   currentQuestionScored = false;
   const currentData = VERTEBRATES_DATA[gameOrder[currentPairIndex]];
   animalImg.src = currentData.image;
-  animalImg.alt = `Imagen de un vertebrado`;
+  animalImg.alt = `Vertebrate image`;
 
   currentSelection = null;
-  selectSelectedEl.textContent = `Seleccionar opción`;
+  selectSelectedEl.textContent = `Select option`;
   customSelect.classList.remove('correct', 'incorrect');
   selectSelectedEl.classList.remove('correct-blink', 'incorrect-blink');
   checkBtn.style.display = 'inline-flex';
@@ -831,10 +841,10 @@ function finishGame(){
 
   const finalScore = Math.round((correctFirstAttempts / TOTAL_QUESTIONS) * 100);
 
-  // 1. Mostrar pantalla de resultados ANTES del modal
+  // 1. Show results screen BEFORE modal
   showScreen('resultsScreen');
 
-  // 2. Reproducir efectos inmediatamente (según petición de corrección)
+  // 2. Play effects immediately
   const finalMsgEl = el('finalMsg');
   const trophyBox = el('trophyBox');
   
@@ -843,7 +853,7 @@ function finishGame(){
 
   let msg;
   if (finalScore === 100) {
-    msg = '¡Genial! ¡Puntuación perfecta!';
+    msg = 'Amazing! Perfect score!';
     trophyBox.style.display = 'block';
     reproducirSonidoVictoria();
     spawnConfetti();
@@ -851,16 +861,16 @@ function finishGame(){
     trophyBox.style.display = 'none';
     reproducirSonidoCompletado();
     if (finalScore >= 80) {
-      msg = 'Casi lo logras. ¡Sigue practicando!';
+      msg = 'Good job! Keep practising!';
     } else if (finalScore >= 50) {
-      msg = 'No está mal, pero aún puedes hacerlo mejor';
+      msg = 'Keep learning and try again!';
     } else {
-      msg = 'Vaya desastre... ¿Seguro que has estudiado?';
+      msg = 'What a disaster... Are you sure you studied?';
     }
   }
   finalMsgEl.textContent = msg;
 
-  // 3. Mostrar modal para enviar puntuación (no interfiere con el sonido/visual ya mostrados)
+  // 3. Show modal to submit score (does not interfere with sound/visuals shown)
   showSubmitModal(elapsed, finalScore);
 }
 
