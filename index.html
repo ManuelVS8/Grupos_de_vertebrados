@@ -666,7 +666,7 @@ async function loadHallOfFame() {
             scores.slice(0, 10).forEach((row, index) => {
                 const tr = document.createElement('tr');
                 // Format name: Name + Surname Initial
-                const displayName = `${row.name} ${row.surname ? row.surname.charAt(0).toUpperCase() + '.' : ''}`;
+                const displayName = `${row.name} ${row.surname || ''}`;
                 // Time comes from sheet as number, assume decimal seconds
                 const timeNum = parseFloat(row.time);
                 const timeStr = fmtTime(isNaN(timeNum) ? 0 : timeNum);
